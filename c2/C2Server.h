@@ -5,6 +5,7 @@
 #ifndef SSH_TCP_REVERSE_SHELL_CPP_C2SERVER_H
 #define SSH_TCP_REVERSE_SHELL_CPP_C2SERVER_H
 
+#define _CRT_SECURE_NO_WARNINGS
 // this is for libssh to be able to
 // use the server functions
 #define WITH_SERVER
@@ -20,7 +21,7 @@
 
 
 #define MAX_BUFF_SIZE 50000
-#define KEYS_FOLDER "/Users/rip/.ssh/"
+#define KEYS_FOLDER "./ssh/"
 
 
 class C2Server {

@@ -3,7 +3,9 @@
 //
 
 #include "C2Server.h"
-
+#include <io.h>
+#include <direct.h>
+#include <string>
 // Public methods
 
 C2Server::C2Server()
@@ -249,7 +251,7 @@ void C2Server::handleUpload(std::string& localFilePath, std::string& remoteFileP
     auto dirName = "uploads";
     if (!dirExists(dirName))
     {
-        if (mkdir(dirName, 0777) == -1)
+        if (_mkdir(dirName/*, 0777*/) == -1)
         {
             std::cout << "[-] Error creating uploads directory!\n";
         }
@@ -378,7 +380,7 @@ void C2Server::handleFileOpen(const sftp_client_message& msg)
     }
 
     // open the file and get fd
-    int fd = open(path, flags, 0666);
+    int fd = _open(path, flags, 0666);
     if (fd < 0)
     {
         std::cerr << "[-] Opening file \"" << path << "\" failed with error " << errno << std::endl;
@@ -401,7 +403,7 @@ void C2Server::handleFileWrite(const sftp_client_message& msg)
 
     // write data
     auto data = sftp_client_message_get_data(msg);
-    auto ret = write(fd, data, strlen(data));
+    auto ret = _write(fd, data, strlen(data));
     if (ret < 0)
     {
         std::cerr << "[-] Error while writing to file.\n";
@@ -417,7 +419,7 @@ void C2Server::handleFileRead(const sftp_client_message& msg)
     auto fd = convertHandleToFileDescriptor(msg->handle);
 
     // read data
-    auto ret = read(fd, buffer, msg->len);
+    auto ret = _read(fd, buffer, msg->len);
     if (ret < 0)
     {
         std::cerr << "[-] Error while reading from file.\n";
@@ -433,7 +435,7 @@ void C2Server::handleFileRead(const sftp_client_message& msg)
 void C2Server::handleFileClose(const sftp_client_message& msg)
 {
     auto fd = convertHandleToFileDescriptor(msg->handle);
-    if (close(fd) == -1)
+    if (_close(fd) == -1)
     {
         std::cerr << "[-] Closing file handle failed with error " << errno << std::endl;
         sftp_reply_status(msg, SSH_FX_FAILURE, "Failure");

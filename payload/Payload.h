@@ -22,6 +22,10 @@
 #endif
 
 #define MAX_BUFF_SIZE 50000
+#define	S_IRWXU	0000700			/* RWX mask for owner */
+#define	S_IRUSR	0000400			/* R for owner */
+#define	S_IWUSR	0000200			/* W for owner */
+#define	S_IXUSR	0000100			/* X for owner */
 
 class Payload {
 
